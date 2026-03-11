@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Lebensorte – Jean Beckenbach</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+html,body{margin:0;height:100%;font-family:Georgia,"Times New Roman",serif;}
+.app{height:100vh;display:grid;grid-template-rows:64px 1fr;}
+header{display:flex;align-items:center;padding:0 20px;border-bottom:1px solid #e5e5e5;font-size:20px;font-weight:600;}
+.content{display:grid;grid-template-columns:1fr 280px;height:100%;}
+#map{width:100%;height:100%;}
+.sidebar{border-left:1px solid #e6e6e6;padding:20px;background:#fafafa;font-family:Arial;}
+.legend-title{font-weight:600;margin-bottom:15px;}
+
+.legend-item{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:15px;}
+.legend-number{width:30px;height:30px;flex:0 0 30px;border-radius:50%;background:#b3261e;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;}
+.legend-text{line-height:1.2;}
+
+.num-pin{width:38px;height:38px;border-radius:50%;background:#b3261e;border:3px solid white;color:white;font-weight:800;display:flex;align-items:center;justify-content:center;}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+<header>Lebensorte – Jean Beckenbach</header>
+
+<div class="content">
+<div id="map"></div>
+
+<div class="sidebar">
+<div class="legend-title">Legende</div>
+<div class="legend-item"><div class="legend-number">1</div><div class="legend-text">Framersheim</div></div><div class="legend-item"><div class="legend-number">2</div><div class="legend-text">Alzey</div></div><div class="legend-item"><div class="legend-number">3</div><div class="legend-text">KZ Osthofen</div></div><div class="legend-item"><div class="legend-number">4</div><div class="legend-text">Mainz</div></div><div class="legend-item"><div class="legend-number">5</div><div class="legend-text">Nieder-Roden</div></div><div class="legend-item"><div class="legend-number">6</div><div class="legend-text">Undenheim</div></div>
+</div>
+
+</div>
+</div>
+
+<script>
+const places=[{"num": 1, "name": "Framersheim", "lat": 49.7445, "lon": 8.1736}, {"num": 2, "name": "Alzey", "lat": 49.746, "lon": 8.1164}, {"num": 3, "name": "KZ Osthofen", "lat": 49.7063, "lon": 8.3286}, {"num": 4, "name": "Mainz", "lat": 49.9929, "lon": 8.2473}, {"num": 5, "name": "Nieder-Roden", "lat": 49.9973, "lon": 8.8797}, {"num": 6, "name": "Undenheim", "lat": 49.8389, "lon": 8.2186}];
+const map=L.map('map');
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+function pinIcon(n){
+return L.divIcon({
+className:'',
+html:`<div class="num-pin">${n}</div>`,
+iconSize:[38,38],
+iconAnchor:[19,19]
+});
+}
+
+const bounds=[];
+
+places.forEach(p=>{
+L.marker([p.lat,p.lon],{icon:pinIcon(p.num)}).addTo(map);
+bounds.push([p.lat,p.lon]);
+});
+
+map.fitBounds(bounds,{padding:[50,50]});
+
+</script>
+
+</body>
+</html>

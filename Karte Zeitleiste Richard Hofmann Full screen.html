@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Lebensorte – Richard Hofmann</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+html,body{height:100%;}
+.app{height:100vh;display:grid;grid-template-rows:64px 1fr;}
+.content{grid-template-columns:1fr 280px;}
+
+html,body{margin:0;font-family:Georgia,"Times New Roman",serif;background:#fff;}
+*{box-sizing:border-box;}
+header{display:flex;align-items:center;padding:0 20px;border-bottom:1px solid #e5e5e5;font-size:20px;font-weight:600;}
+.content{display:grid;height:100%;}
+#map{width:100%;height:100%;}
+.sidebar{border-left:1px solid #e6e6e6;padding:20px;background:#fafafa;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;}
+.legend-title{font-size:12px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:18px;color:#555;font-weight:600;}
+.legend-item{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px;font-size:15px;}
+.legend-number{
+  width:30px;
+  min-width:30px;
+  max-width:30px;
+  height:30px;
+  min-height:30px;
+  max-height:30px;
+  aspect-ratio:1/1;
+  flex:0 0 30px;
+  flex-shrink:0;
+  border-radius:9999px;
+  background:#b3261e;
+  color:#fff;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:700;
+  line-height:1;
+  text-align:center;
+  border:2px solid #fff;
+  box-shadow:0 1px 3px rgba(0,0,0,.2);
+}
+.legend-text{flex:1 1 auto; line-height:1.25;}
+.num-pin{
+  width:38px;height:38px;border-radius:9999px;background:#b3261e;border:3px solid #fff;
+  color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 6px rgba(0,0,0,.35);line-height:1;
+}
+
+@media(max-width:800px){.content{grid-template-columns:1fr;}.sidebar{border-left:none;border-top:1px solid #e6e6e6;}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>Lebensorte – Richard Hofmann</header>
+<div class="content">
+<div id="map"></div>
+<div class="sidebar">
+<div class="legend-title">Legende</div>
+<div class="legend-item"><div class="legend-number">1</div><div class="legend-text">Bechtheim</div></div><div class="legend-item"><div class="legend-number">2</div><div class="legend-text">KZ Osthofen</div></div><div class="legend-item"><div class="legend-number">3</div><div class="legend-text">KZ Dachau</div></div><div class="legend-item"><div class="legend-number">4</div><div class="legend-text">KZ Sachsenhausen / Oranienburg</div></div><div class="legend-item"><div class="legend-number">5</div><div class="legend-text">Feistritz</div></div><div class="legend-item"><div class="legend-number">6</div><div class="legend-text">Bonn</div></div>
+</div>
+</div>
+</div>
+<script>
+const places=[{"num": 1, "name": "Bechtheim", "lat": 49.7847, "lon": 8.1817}, {"num": 2, "name": "KZ Osthofen", "lat": 49.7063, "lon": 8.3286}, {"num": 3, "name": "KZ Dachau", "lat": 48.26, "lon": 11.434}, {"num": 4, "name": "KZ Sachsenhausen / Oranienburg", "lat": 52.7556, "lon": 13.2597}, {"num": 5, "name": "Feistritz", "lat": 46.55, "lon": 13.7}, {"num": 6, "name": "Bonn", "lat": 50.7374, "lon": 7.0982}];
+const map=L.map('map');
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
+function pinIcon(n){return L.divIcon({className:'',html:`<div class="num-pin">${n}</div>`,iconSize:[38,38],iconAnchor:[19,19]});}
+const bounds=[];
+places.forEach(p=>{L.marker([p.lat,p.lon],{icon:pinIcon(p.num)}).addTo(map);bounds.push([p.lat,p.lon]);});
+map.fitBounds(bounds,{padding:[50,50]});
+setTimeout(()=>map.invalidateSize(),50);
+</script>
+</body>
+</html>

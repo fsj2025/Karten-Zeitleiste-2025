@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Lebensorte – Max Tschornicki</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+html,body{margin:0;height:100%;font-family:Georgia,"Times New Roman",serif;}
+.app{height:100vh;display:grid;grid-template-rows:64px 1fr;}
+header{display:flex;align-items:center;padding:0 20px;border-bottom:1px solid #e5e5e5;font-size:20px;font-weight:600;}
+.content{display:grid;grid-template-columns:1fr 300px;height:100%;}
+#map{width:100%;height:100%;}
+.sidebar{border-left:1px solid #e6e6e6;padding:20px;background:#fafafa;font-family:Arial;}
+.legend-title{font-weight:600;margin-bottom:15px;}
+
+.legend-item{display:flex;align-items:center;gap:10px;margin-bottom:10px;font-size:15px;}
+.legend-number{width:30px;height:30px;flex:0 0 30px;border-radius:50%;background:#b3261e;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;}
+.legend-text{line-height:1.2;}
+
+.num-pin{width:38px;height:38px;border-radius:50%;background:#b3261e;border:3px solid white;color:white;font-weight:800;display:flex;align-items:center;justify-content:center;}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+<header>Lebensorte – Max Tschornicki</header>
+
+<div class="content">
+<div id="map"></div>
+
+<div class="sidebar">
+<div class="legend-title">Legende</div>
+<div class="legend-item"><div class="legend-number">1</div><div class="legend-text">Rüsselsheim</div></div><div class="legend-item"><div class="legend-number">2</div><div class="legend-text">Mainz</div></div><div class="legend-item"><div class="legend-number">3</div><div class="legend-text">Bingen</div></div><div class="legend-item"><div class="legend-number">4</div><div class="legend-text">Gießen</div></div><div class="legend-item"><div class="legend-number">5</div><div class="legend-text">KZ Osthofen</div></div><div class="legend-item"><div class="legend-number">6</div><div class="legend-text">Saarland</div></div><div class="legend-item"><div class="legend-number">7</div><div class="legend-text">Toulouse</div></div><div class="legend-item"><div class="legend-number">8</div><div class="legend-text">Marseille</div></div><div class="legend-item"><div class="legend-number">9</div><div class="legend-text">Lyon</div></div><div class="legend-item"><div class="legend-number">10</div><div class="legend-text">KZ Auschwitz</div></div><div class="legend-item"><div class="legend-number">11</div><div class="legend-text">KZ Buchenwald</div></div><div class="legend-item"><div class="legend-number">12</div><div class="legend-text">KZ Natzweiler</div></div><div class="legend-item"><div class="legend-number">13</div><div class="legend-text">KZ Dachau</div></div>
+</div>
+
+</div>
+</div>
+
+<script>
+const places=[{"num": 1, "name": "Rüsselsheim", "lat": 49.9896, "lon": 8.422}, {"num": 2, "name": "Mainz", "lat": 49.9929, "lon": 8.2473}, {"num": 3, "name": "Bingen", "lat": 49.9667, "lon": 7.9}, {"num": 4, "name": "Gießen", "lat": 50.5873, "lon": 8.6755}, {"num": 5, "name": "KZ Osthofen", "lat": 49.7063, "lon": 8.3286}, {"num": 6, "name": "Saarland", "lat": 49.3964, "lon": 7.0229}, {"num": 7, "name": "Toulouse", "lat": 43.6047, "lon": 1.4442}, {"num": 8, "name": "Marseille", "lat": 43.2965, "lon": 5.3698}, {"num": 9, "name": "Lyon", "lat": 45.764, "lon": 4.8357}, {"num": 10, "name": "KZ Auschwitz", "lat": 50.0359, "lon": 19.1783}, {"num": 11, "name": "KZ Buchenwald", "lat": 51.0211, "lon": 11.2656}, {"num": 12, "name": "KZ Natzweiler", "lat": 48.4446, "lon": 7.2546}, {"num": 13, "name": "KZ Dachau", "lat": 48.26, "lon": 11.434}];
+const map=L.map('map');
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+function pinIcon(n){
+return L.divIcon({
+className:'',
+html:`<div class="num-pin">${n}</div>`,
+iconSize:[38,38],
+iconAnchor:[19,19]
+});
+}
+
+const bounds=[];
+
+places.forEach(p=>{
+L.marker([p.lat,p.lon],{icon:pinIcon(p.num)}).addTo(map);
+bounds.push([p.lat,p.lon]);
+});
+
+map.fitBounds(bounds,{padding:[50,50]});
+
+</script>
+
+</body>
+</html>

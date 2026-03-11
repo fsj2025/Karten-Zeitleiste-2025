@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lebensorte – Carlo Mierendorff</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<style>
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: Georgia, "Times New Roman", serif;
+  background: #ffffff;
+}
+* { box-sizing: border-box; }
+.app {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: 64px 1fr;
+}
+header {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 20px;
+  font-weight: 600;
+}
+.content {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  height: 100%;
+}
+#map {
+  width: 100%;
+  height: 100%;
+}
+.sidebar {
+  border-left: 1px solid #e6e6e6;
+  padding: 20px 18px;
+  background: #fafafa;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  overflow-y: auto;
+}
+.legend-title {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 18px;
+  color: #555;
+  font-weight: 600;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  font-size: 15px;
+  color: #1f1f1f;
+}
+.legend-number {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 999px;
+  background: #b3261e;
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  border: 2px solid #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+.num-pin {
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: #b3261e;
+  border: 3px solid #fff;
+  color: #fff;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+}
+@media (max-width: 900px) {
+  .content { grid-template-columns: 1fr; }
+  .sidebar {
+    border-left: none;
+    border-top: 1px solid #e6e6e6;
+  }
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+  <header>Lebensorte – Carlo Mierendorff</header>
+  <div class="content">
+    <div id="map"></div>
+    <div class="sidebar">
+      <div class="legend-title">Legende</div>
+      <div class="legend-item"><div class="legend-number">1</div><div>Großenhain (Sachsen)</div></div><div class="legend-item"><div class="legend-number">2</div><div>Frankfurt am Main</div></div><div class="legend-item"><div class="legend-number">3</div><div>Darmstadt</div></div><div class="legend-item"><div class="legend-number">4</div><div>Heidelberg</div></div><div class="legend-item"><div class="legend-number">5</div><div>Berlin</div></div><div class="legend-item"><div class="legend-number">6</div><div>Schweiz</div></div><div class="legend-item"><div class="legend-number">7</div><div>KZ Osthofen</div></div><div class="legend-item"><div class="legend-number">8</div><div>KZ Lichtenburg</div></div><div class="legend-item"><div class="legend-number">9</div><div>KZ Buchenwald</div></div><div class="legend-item"><div class="legend-number">10</div><div>Leipzig</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const places = [{"num": 1, "name": "Großenhain (Sachsen)", "lat": 51.289, "lon": 13.534}, {"num": 2, "name": "Frankfurt am Main", "lat": 50.1109, "lon": 8.6821}, {"num": 3, "name": "Darmstadt", "lat": 49.8728, "lon": 8.6512}, {"num": 4, "name": "Heidelberg", "lat": 49.3988, "lon": 8.6724}, {"num": 5, "name": "Berlin", "lat": 52.52, "lon": 13.405}, {"num": 6, "name": "Schweiz", "lat": 46.8182, "lon": 8.2275}, {"num": 7, "name": "KZ Osthofen", "lat": 49.7063, "lon": 8.3286}, {"num": 8, "name": "KZ Lichtenburg", "lat": 51.675, "lon": 12.998}, {"num": 9, "name": "KZ Buchenwald", "lat": 51.0211, "lon": 11.2656}, {"num": 10, "name": "Leipzig", "lat": 51.3397, "lon": 12.3731}];
+
+const map = L.map('map');
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  maxZoom: 19,
+  attribution: '&copy; OpenStreetMap'
+}).addTo(map);
+
+function pinIcon(num) {
+  return L.divIcon({
+    className: '',
+    html: `<div class="num-pin">${num}</div>`,
+    iconSize: [40, 40],
+    iconAnchor: [20, 20]
+  });
+}
+
+const bounds = [];
+places.forEach(p => {
+  L.marker([p.lat, p.lon], { icon: pinIcon(p.num) }).addTo(map);
+  bounds.push([p.lat, p.lon]);
+});
+
+map.fitBounds(bounds, { padding: [50, 50] });
+setTimeout(() => map.invalidateSize(), 50);
+</script>
+</body>
+</html>
